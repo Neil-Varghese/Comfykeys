@@ -1,0 +1,393 @@
+<% layout("/layouts/boilerplate")%>
+
+<style>
+    .custom-input {   
+        /* Custom styles for the dropdown button */
+        display: block;
+        width: 100%;
+        padding: 0.375rem 0.75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da !important; /* Ensures border is applied */
+        border-radius: 0.375rem;
+        appearance: none;
+        text-align: left;
+        box-shadow: none; /* Removes Bootstrap's default button shadow */
+    }
+
+    .custom-dropdown {
+        /* Custom styles for the dropdown button */
+        display: block;
+        width: 100%;
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #f8f9fa; /* Light gray background */
+        border: 1px solid #ced4da; /* Subtle border */
+        border-radius: 0.375rem;
+        transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .custom-dropdown:hover {
+        /* Hover effect */
+        background-color: #e9ecef; /* Slight hover effect */
+        border-color: #adb5bd;
+    }
+
+    .dropdown-menu {
+        /* Custom styles for the dropdown menu */
+        width: 100%; /* Full width dropdown */
+        max-height: 200px; /* Set max height for scrolling */
+        overflow-y: auto; /* Enable vertical scrolling */
+        border-radius: 0.375rem; /* Rounded corners */
+        border: 1px solid #ced4da;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15); /* Subtle shadow for depth */
+    }
+
+    .dropdown-menu::-webkit-scrollbar {
+        width: 8px; /* Add scrollbar width */
+    }
+
+    .dropdown-menu::-webkit-scrollbar-thumb {
+        background-color: #adb5bd; /* Scrollbar color */
+        border-radius: 4px;
+    }
+
+    .dropdown-menu::-webkit-scrollbar-thumb:hover {
+        background-color: #868e96; /* Darker on hover */
+    }
+
+    .dropdown-menu .dropdown-item {
+        display: flex;
+        align-items: center;
+        font-size: 0.9rem; /* Slightly smaller font for options */
+        padding: 0.5rem 1rem;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .dropdown-menu .dropdown-item:hover {
+        background-color: #e9ecef; /* Highlight effect on hover */
+        color: #495057;
+        cursor: pointer;
+    }
+
+    .category-checkbox {
+        margin-right: 0.5rem; /* Space between checkbox and label */
+    }
+
+    /* Ensures the dropdown remains visible and looks clean */
+    .custom-dropdown:focus,
+    .custom-dropdown:active {
+        background-color: #e9ecef;
+        border-color: #adb5bd;
+        outline: none;
+        box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25); /* Subtle focus shadow */
+    }
+
+</style>
+
+<body>      <!-- Body of the page -->
+    <div class="row mt-3">
+        <div class="col-8 offset-2">
+
+            <h3><b>Create a New Listing</b></h3>
+            <form method="POST" action="/listings" novalidate class="needs-validation" enctype="multipart/form-data">  <!-- Form to create a new listing -->
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title</label>  <!-- Title of the listing -->
+                    <input 
+                        id="title"
+                        name="listing[title]" 
+                        placeholder="Add a catchy title" 
+                        type="text" 
+                        class="form-control" 
+                        required
+                    />                                               <!-- Input field for the title -->
+                    <div class="valid-feedback">Title looks good!</div> <!-- Valid feedback -->
+                    <div class="invalid-feedback">Title should be valid</div>   <!-- Invalid feedback -->
+                </div>
+
+                <div class="mb-3">                                          
+                    <label for="description" class="form-label">Description</label> 
+                    <textarea 
+                        id="description"
+                        name="listing[description]" 
+                        class="form-control"
+                        required></textarea>                       <!-- Text area for the description -->
+                    <div class="invalid-feedback">Please enter a short description</div> <!-- Invalid feedback -->
+                </div>
+
+                <div class="mb-3">
+                    <label for="image" class="form-label">Upload Listing Image</label>  <!-- Label for the image -->
+                    <input name="listing[image]" 
+                        id="image"
+                        type="file" 
+                        class="form-control"
+                        accept=".png, .jpg, .jpeg"  
+                        required
+                    />                                                                   <!-- Input field for the image -->
+                    <div class="valid-feedback">Looks good!</div>   <!-- Valid feedback -->
+                    <div class="invalid-feedback">Only PNG, JPG, or JPEG files are allowed.</div> <!-- Invalid feedback -->
+                </div>
+
+                <div class="row">    
+
+                    <div class="mb-3 col-md-4">                        
+                        <label for="price" class="form-label">Price</label> <!-- Label for the price -->
+                        <input name="listing[price]" 
+                            id="price"
+                            placeholder="Enter price per night" 
+                            type="number"
+                            class="form-control"
+                            required 
+                        />                                                  <!-- Input field for the price -->  
+                        <div class="invalid-feedback">Price should be valid</div>  <!-- Invalid feedback -->
+                    </div>
+
+                    <div class="mb-3 col-md-4">
+                        <label for="country" class="form-label">Country</label>  <!-- Label for the country -->
+                        <input name="listing[country]" 
+                            id="country"
+                            placeholder="Enter country" 
+                            type="text" 
+                            class="form-control" 
+                            required
+                        />                                                        <!-- Input field for the country -->
+                        <div class="invalid-feedback">Country should be valid</div>   <!-- Invalid feedback -->
+                    </div>  
+
+                    <div class="mb-3 col-md-4">
+                        <label for="categoriesDropdown" class="form-label">Select Categories</label>  <!-- Label for the categories -->
+                        <div class="dropdown">                                  <!-- Dropdown for the categories -->
+                            <button 
+                                class="btn dropdown-toggle custom-input form-control" 
+                                type="button" 
+                                id="categoriesDropdown" 
+                                data-bs-toggle="dropdown" 
+                                aria-expanded="false"
+                            >                                                 <!-- Button for the dropdown -->
+                                Select categories
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="categoriesDropdown">   <!-- Dropdown menu for the categories -->
+                                <li>                                             <!-- List of categories -->
+                                    <label class="dropdown-item">                <!-- Label for the category -->
+                                        <input type="checkbox" class="category-checkbox" value="Popular"> Popular   <!-- Checkbox for the category -->
+                                        &nbsp;&nbsp;                        <!-- Space between the checkbox and the label -->
+                                        <i class="fa-solid fa-thumbs-up"></i>    <!-- Icon for the category -->
+                                    </label>                                        <!-- Closing tag for the label -->
+                                </li>
+                                <li>
+                                    <label class="dropdown-item">
+                                        <input type="checkbox" class="category-checkbox" value="Pools"> Pools
+                                        &nbsp;&nbsp;
+                                        <i class="fa-solid fa-water-ladder"></i>
+                                    </label>
+                                </li>
+                                <li>
+                                    <label class="dropdown-item">
+                                        <input type="checkbox" class="category-checkbox" value="Rooms"> Rooms
+                                        &nbsp;&nbsp;
+                                        <i class="fa-solid fa-bed"></i>
+                                    </label>
+                                </li>
+                                <li>
+                                    <label class="dropdown-item">
+                                        <input type="checkbox" class="category-checkbox" value="Beach"> Beach
+                                        &nbsp;&nbsp;
+                                        <i class="fa-solid fa-umbrella-beach"></i>
+                                    </label>
+                                </li>
+                                <li>
+                                    <label class="dropdown-item">
+                                        <input type="checkbox" class="category-checkbox" value="City"> City
+                                        &nbsp;&nbsp;
+                                        <i class="fa-solid fa-city"></i>
+                                    </label>
+                                </li>
+                                <li>
+                                    <label class="dropdown-item">
+                                        <input type="checkbox" class="category-checkbox" value="Hills"> Hills
+                                        &nbsp;&nbsp;
+                                        <i class="fa-solid fa-mountain"></i>
+                                    </label>
+                                </li>
+                                <li>
+                                    <label class="dropdown-item">
+                                        <input type="checkbox" class="category-checkbox" value="Camping"> Camping
+                                        &nbsp;&nbsp;
+                                        <i class="fa-solid fa-campground"></i>
+                                    </label>
+                                </li>
+                                <li>
+                                    <label class="dropdown-item">
+                                        <input type="checkbox" class="category-checkbox" value="Snow"> Snow
+                                        &nbsp;&nbsp;
+                                        <i class="fa-solid fa-snowflake"></i>
+                                    </label>
+                                </li>
+
+                                <li>
+                                    <label class="dropdown-item">
+                                        <input type="checkbox" class="category-checkbox" value="Monuments"> Monuments
+                                        &nbsp;&nbsp;
+                                        <i class="fa-solid fa-monument"></i>
+                                    </label>
+                                </li>
+                                <li>
+                                    <label class="dropdown-item">
+                                        <input type="checkbox" class="category-checkbox" value="Luxury"> Luxury
+                                        &nbsp;&nbsp;
+                                        <i class="fa-solid fa-dollar-sign"></i>
+                                    </label>
+                                </li>
+                                <li>
+                                    <label class="dropdown-item">
+                                        <input type="checkbox" class="category-checkbox" value="Farm"> Farm
+                                        &nbsp;&nbsp;
+                                        <i class="fa-solid fa-cow"></i>
+                                    </label>
+                                </li>
+                                <li>
+                                    <label class="dropdown-item">
+                                        <input type="checkbox" class="category-checkbox" value="Boating"> Boating
+                                        &nbsp;&nbsp;
+                                        <i class="fa-solid fa-sailboat"></i>
+                                    </label>
+                                </li>
+                                <li>
+                                    <label class="dropdown-item">
+                                        <input type="checkbox" class="category-checkbox" value="Skiing"> Skiing
+                                        &nbsp;&nbsp;
+                                        <i class="fa-solid fa-person-skiing-nordic"></i>
+                                    </label>
+                                </li>
+                                <li>
+                                    <label class="dropdown-item">
+                                        <input type="checkbox" class="category-checkbox" value="Play"> Play
+                                        &nbsp;&nbsp;
+                                        <i class="fa-solid fa-bowling-ball"></i>
+                                    </label>
+                                </li>
+                                <li>
+                                    <label class="dropdown-item">
+                                        <input type="checkbox" class="category-checkbox" value="Boring"> Boring
+                                        &nbsp;&nbsp;
+                                        <i class="fa-solid fa-glasses"></i>
+                                    </label>
+                                </li>
+
+
+                            </ul>
+                        </div>
+
+                        <div id="hidden-inputs-container"></div>   
+
+                    </div>
+                </div>
+
+                <div class="mb-3">                                                 <!-- Input field for the location -->
+                    <label for="location" class="form-label">Location</label>       
+                    <input name="listing[location]"
+                        id="location" 
+                        placeholder="Jaipur, Rajasthan" 
+                        type="text" 
+                        class="form-control" 
+                        required
+                    />                                                                   <!-- Input field for the location -->
+                    <div class="invalid-feedback">Location should be valid</div>           <!-- Invalid feedback -->
+                </div>
+
+                <br> 
+                <button class="btn  btn-success mt-3 mb-5 offset-6 ">Add</button>       <!-- Button to add the listing -->
+
+            </form>
+        </div>
+    </div>
+
+    <script>  
+
+        //THIS CODE HAS BEEN PUT INTO THE MAIN JAVASCRIPT 
+        // const dropdownButton = document.getElementById("categoriesDropdown"); // Dropdown button
+        // const checkboxes = document.querySelectorAll(".category-checkbox");     // Checkboxes for the categories
+        // const hiddenInputsContainer = document.getElementById("hidden-inputs-container");       // Hidden inputs container
+    
+        // checkboxes.forEach(checkbox => {                         // For each checkbox
+        //     checkbox.addEventListener("change", () => {         // Event listener for the change
+        //         const { value, checked } = checkbox;            // Value and checked status of the checkbox
+    
+        //         if (checked) {                                               // If the checkbox is checked
+        //             const hiddenInput = document.createElement("input");    // Create a hidden input
+        //             hiddenInput.type = "hidden";                              // Set the type of the input
+        //             hiddenInput.name = "listing[categories][]";
+        //             hiddenInput.value = value;
+        //             hiddenInput.dataset.value = value;
+        //             hiddenInputsContainer.appendChild(hiddenInput);
+        //         } else {                                          // If the checkbox is unchecked
+        //             const hiddenInputToRemove = hiddenInputsContainer.querySelector(`input[data-value="${value}"]`); // Find the hidden input to remove
+        //             if (hiddenInputToRemove) {                  // If the hidden input exists
+        //                 hiddenInputToRemove.remove();
+        //             }
+        //         }
+    
+        //         updateSelectedCategories();                    // Update the selected categories
+        //     });
+        // });
+    
+        // function updateSelectedCategories() {                  // Function to update the selected categories
+        //     const selected = Array.from(checkboxes)            // Array of selected checkboxes
+        //         .filter(checkbox => checkbox.checked)          // Filter the checkboxes that are checked
+        //         .map(checkbox => checkbox.value);
+    
+        //     if (selected.length > 0) {                         // If there are selected categories
+        //         dropdownButton.textContent = `${selected.length} Selected`;   // Display the number of selected categories
+        //         dropdownButton.title = selected.join(", ");
+        //         dropdownButton.classList.remove("is-invalid");
+        //         dropdownButton.classList.add("is-valid");
+        //     } else {                                           // If there are no selected categories
+        //         dropdownButton.textContent = "Select categories";
+        //         dropdownButton.title = "";
+        //         dropdownButton.classList.remove("is-invalid");
+        //         dropdownButton.classList.add("is-valid");
+        //     }
+        // }
+    
+        // // Prevent dropdown from closing when clicking inside
+        // const dropdownMenu = document.querySelector(".dropdown-menu");
+        // dropdownMenu.addEventListener("click", (event) => {
+        //     event.stopPropagation();
+        // });
+    
+        // // Update selected categories when the dropdown is hidden
+        // document.addEventListener("DOMContentLoaded", function () {
+        //     const fileInput = document.getElementById("image");
+        //     const allowedExtensions = ["png", "jpg", "jpeg"];
+    
+        //     // Validate the file input
+        //     fileInput.addEventListener("change", function () {
+        //         const file = fileInput.files[0];                                      // Get the file
+    
+        //         if (file) {                                                           // If the file exists
+        //             const fileName = file.name.toLowerCase();
+        //             const fileExtension = fileName.split('.').pop();
+    
+        //             if (allowedExtensions.includes(fileExtension)) {                    // If the file extension is allowed
+        //                 fileInput.classList.remove("is-invalid");
+        //                 fileInput.classList.add("is-valid");
+        //             } else {                                                            // If the file extension is not allowed
+        //                 fileInput.classList.remove("is-valid");
+        //                 fileInput.classList.add("is-invalid");
+        //                 alert("Invalid file type. Only PNG, JPG, or JPEG files are allowed.");
+        //                 fileInput.value = ""; // Reset the file input
+        //             } 
+        //         } else {                                                                 // If the file does not exist
+        //             fileInput.classList.remove("is-valid");
+        //             fileInput.classList.add("is-invalid");
+        //         }
+        //     });
+        // });
+    </script>
+    
+</body>

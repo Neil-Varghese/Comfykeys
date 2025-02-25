@@ -1,0 +1,262 @@
+<style>
+    /* Navbar styling */
+    .search-btn{                                    
+        background-color: #208454;
+        color: white;
+        border-radius: 100px;
+        padding: 0 1rem 0 1rem;
+        display: flex; align-items: center;
+        height: 50px;
+        box-shadow: 5px 5px 5px lightgray;
+        border: none;
+        
+    }
+
+    /* Navbar styling */
+    .search-btn:hover{
+        background-color: #28a745;
+        color: white;
+    }
+
+    /* Navbar styling */
+    .search-container {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        width: 350px;
+        left: 475px;
+        top: 15px;
+    }
+
+    /* Navbar styling */
+    .search-inp {
+        padding-right: 35px; /* Make space for the X button */
+        border-radius: 25px;
+        height: 50px;
+        text-align: center;
+        box-shadow: 5px 5px 5px lightgray;
+        
+    }
+
+    
+    .search-inp:hover{
+        background-color: #f0ecec;
+    }
+
+    
+    .clear-btn {
+        position: absolute;
+        right: 70px; 
+        top: 3%;
+        background: none;
+        border: none;
+        color: black; 
+        font-size: 25px;
+
+        cursor: pointer;
+        display: none;
+        
+        height: 25px;
+        width: 30px;
+        
+    }
+
+    /* Show the X button when the input has text */
+    .search-inp:not(:placeholder-shown) + .clear-btn {
+        display: block; /* Show when input has text */
+    }
+
+    /* Hide the default cancel button in Chrome */
+    .search-inp::-webkit-search-cancel-button {
+        display: none; /* Hides the default cancel button */
+    }
+
+    
+    #user-icon{
+        border: 1px solid grey;
+        width: 93px;
+        height: 50px;
+        border-radius: 100px;
+        padding: 0 1rem 0 1rem;
+        align-items: center;
+        gap: 1rem;
+        
+    }
+
+    
+    #user-icon:hover{
+        box-shadow: 5px 5px 5px lightgray;
+    }
+
+    /* Dropdown styling */
+    #user-info {
+        position: fixed;
+        width: 250px; /* Slightly wider for better spacing */
+        border: 1px solid #ccc;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+        height: auto;
+        right: 15px;
+        top: 70px;
+        z-index: 10000;
+        border-radius: 10px;
+        display: none;
+        background-color: white;
+        padding: 15px; /* Adds inner spacing */
+        font-family: Arial, sans-serif;
+    }
+
+    /* Style links inside the dropdown */
+    #user-info .nav-link {
+        display: block; /* Ensures full-width clickability */
+        text-decoration: none;
+        color: grey; /* Dark gray text for readability */
+        padding: 8px 10px;
+        border-radius: 5px;
+        transition: background 0.3s ease;
+        border: solid 1px grey;
+        margin-bottom: 2px;
+        text-align: center;
+    }
+
+    /* Hover effect for links */
+    #user-info .nav-link:hover {
+        background-color: #f5f5f5;
+    }
+
+    /* User icon styling */
+    .large-user-icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 50px;
+        height: 50px;
+        background-color: #f0f0f0;
+        border-radius: 50%;
+        margin: 0 auto 10px auto;
+    }
+
+    /* User icon styling */
+    .large-user-icon i {
+        font-size: 24px;
+        color: #555;
+    }
+
+    /* Paragraph styles */
+    #user-info p {
+        margin: 5px 0;
+        font-size: 14px;
+        color: #555;
+    }
+
+    /* Navbar styling */    
+    #user-circle-icon{
+        font-size: 35px;
+        position: relative;
+        left: 3px;
+        color: gray;
+    }
+
+    /* Navbar styling */
+    #searchbar{
+        border-radius: 25px;
+    }
+    
+
+</style>
+
+<!--THIS IS THE NAVBAR OF THE WEBSITE-->
+<nav class="navbar navbar-expand-lg bg-body-light border-bottom sticky-top">
+    <div class="container-fluid">
+        <!-- Navbar logo -->
+        <a class="navbar-brand" href="/listings"><img id = "logo" src="/imgs/comfykeys logo.png" alt="company logo"></a>
+       
+        <!-- Navbar toggler -->
+        <button 
+            class="navbar-toggler" 
+            type="button" 
+            data-bs-toggle="collapse" 
+            data-bs-target="#navbarNavAltMarkup" 
+        >
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <!-- Navbar links -->
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            
+            <!-- Navbar links -->
+            <div class="navbar-nav ms-auto">
+                <form class="d-flex search-container" role="search" action="/listings" method="GET"> <!-- Search bar -->
+                    <input class="form-control me-2 search-inp" id = "searchbar" type="search" name="search" placeholder="Search destinations" oninput="toggleClearButton(this)">
+                    <button type="button" class="clear-btn" onclick="clearSearch(this)">×</button>
+                    <button class="btn search-btn" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                </form>
+            </div>
+
+            <!-- Navbar links -->
+            <div class="navbar-nav ms-auto" id="user-icon"> <!-- User icon -->
+                <i class="fa-solid fa-bars"></i>
+                <i class="fa-solid fa-circle-user" id="user-circle-icon" ></i>
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+
+
+<div id="user-info">     <!-- User info dropdown -->
+    
+    <%if(!currUser){%>   <!-- If no user is logged in -->
+        <a class="nav-link" href="/listings/new"><b>ComfyKey your home</b></a> 
+        <a class="nav-link" href="/signup"><b>Sign up</b></a>
+    <a class="nav-link" href="/login"><b>Log in</b></a>
+    <%}%>
+    <%if(currUser){%>     <!-- If a user is logged in -->
+        <div class="large-user-icon">
+            <i class="fa-solid fa-user"></i>
+        </div>
+        <p><strong>Username:</strong> <%= currUser.username%></p>
+        <p><strong>Listings posted: <%= listingsCount %></strong></p>
+        <p><strong>Reviews written: <%= reviewsCount %></strong></p>
+        <a class="nav-link" href="/listings/new"><b>ComfyKey your home</b></a>
+        <a class="nav-link" href="/logout"><b>Log out</b></a>
+    <%}%>
+
+</div>
+
+  <script>
+
+    // Show or hide the dropdown when clicking the user icon
+    const usericon = document.getElementById("user-icon");
+    const userinfo = document.getElementById("user-info");
+
+    usericon.addEventListener("click", function(event) {
+        event.stopPropagation(); // Prevents the click from bubbling to document
+        if (userinfo.style.display === "none" || userinfo.style.display === "") {
+            userinfo.style.display = "block";
+        } else {
+            userinfo.style.display = "none";
+        }
+    });
+
+    // Hide userinfo if clicking outside
+    document.addEventListener("click", function(event) {  // Hide the dropdown if clicked outside
+        if (!userinfo.contains(event.target) && event.target !== usericon) {
+            userinfo.style.display = "none";
+        }
+    });
+
+    function toggleClearButton(input) {               // Show or hide the X button
+        const clearBtn = input.nextElementSibling;
+        clearBtn.style.display = input.value ? 'block' : 'none';
+    }
+
+    function clearSearch(button) {                      // Clear the search input
+        const input = button.previousElementSibling;
+        input.value = '';
+        button.style.display = 'none';
+        input.focus();
+    }
+
+
+</script>

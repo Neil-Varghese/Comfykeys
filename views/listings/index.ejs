@@ -1,0 +1,276 @@
+<!--ejs view to display all listings-->
+<% layout("/layouts/boilerplate")%>
+<body>
+    <!-- <h3>All Listings</h3> -->
+    <!--
+    <form method="GET" action="/listings/new">
+        <button>Create New Listing</button>
+    </form>
+    -->
+
+    <style>
+
+        /* Add custom styles here */
+        .listing-card {
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            border-radius: 1rem;
+        }
+
+        /* Add hover effect */
+        .listing-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Add custom styles here */
+        #filters{
+            display: flex;
+            flex-wrap:wrap;
+            align-items: center;
+        }
+
+        /* Add custom styles here */
+        .filter{
+            text-align: center;
+            margin-right: 2rem;
+            opacity: 0.7;
+        }
+
+        /* Add hover effect */
+        .filter:hover{
+            opacity: 1;
+            cursor: pointer;
+        }
+
+        /* Add custom styles here */
+        .filter p{
+            font-size: 0.8rem;
+        }
+
+        /* Add custom styles here */
+        .tax-info{
+            display: none;
+        }
+
+        /* Add custom styles here */
+        .tax-toggle{
+            border: 1px solid grey; /* Softer grey */
+            padding: 1.2rem;
+            border-radius: 1rem;
+            height: auto; /* Auto height for flexibility */
+            margin-left: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem; /* Space between switch and label */
+          
+            transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        /* Add hover effect */
+        #scroll-container {
+            overflow-x: scroll;
+            scrollbar-width: none; /* For Firefox */
+            -ms-overflow-style: none; /* For Internet Explorer and Edge */
+        }
+
+        #scroll-container::-webkit-scrollbar {
+            display: none; /* For Chrome, Safari, and Edge */
+        }
+
+        /* Add spacing at the start and end to prevent filters being hidden */
+        #scroll-container::before,
+        #scroll-container::after {
+            content: "";
+            width: 0px; /* Matches the padding added */
+            flex-shrink: 0;
+        }
+
+        /* Add custom styles here */
+        .active-filter {
+            opacity: 1;
+            font-weight: bold;
+            border-bottom: 2px solid black;
+        }
+
+        /* Add custom styles here */
+        .no-listing {
+            font-family: "Arial", sans-serif; /* Change font */
+            font-size: 2rem; /* Make it larger */
+            font-weight: bold; /* Bold text */
+            color: rgb(120, 117, 117); /* Black text */
+            text-align: center; /* Center text horizontally */
+            position: absolute; /* Position it in the center */
+            top: 50%; /* Move it down */
+            left: 50%; /* Move it right */
+            transform: translate(-50%, -50%); /* Perfect centering */
+        }
+
+
+    </style>
+
+
+    <div id="filters-" class="d-flex align-items-center mt-0">  <!-- Added mt-0 to remove top margin -->
+        <!-- Filters Section -->
+        <div class="d-flex overflow-hidden py-3 flex-grow-1 position-relative filter-box">
+            <!-- Left Scroll Button -->
+            <button id="scroll-left" class="btn btn-light position-absolute" style="left: 0; top: 50%; transform: translateY(-50%); z-index: 1;">
+                <i class="fa-solid fa-chevron-left"></i>
+            </button>
+        
+            <!-- Scrollable Filters -->
+            <div id="scroll-container" class="d-flex overflow-auto w-100" style="padding: 0 25px;"> <!-- Added padding for left and right -->
+                <div class="filter text-center mx-3 <%= category === 'Popular' ? 'active-filter' : '' %>" onclick="filterListings('Popular')"> <!-- Added mx-3 for left and right margin -->
+                    <div><i class="fa-solid fa-thumbs-up"></i></div> <!-- Added icon -->
+                    <p>Popular</p>  <!-- Added text -->
+                </div>  <!-- Added closing div -->
+                <div class="filter text-center mx-3 <%= category === 'Pools' ? 'active-filter' : '' %>" onclick="filterListings('Pools')">
+                    <div><i class="fa-solid fa-water-ladder"></i></div>
+                    <p>Pools</p>
+                </div>
+                <div class="filter text-center mx-3 <%= category === 'Rooms' ? 'active-filter' : '' %>" onclick="filterListings('Rooms')">
+                    <div><i class="fa-solid fa-bed"></i></div>
+                    <p>Rooms</p>
+                </div>
+                <div class="filter text-center mx-3 <%= category === 'Beach' ? 'active-filter' : '' %>"onclick="filterListings('Beach')">
+                    <div><i class="fa-solid fa-umbrella-beach"></i></div>
+                    <p>Beach</p>
+                </div>
+                <div class="filter text-center mx-3 <%= category === 'City' ? 'active-filter' : '' %>" onclick="filterListings('City')">
+                    <div><i class="fa-solid fa-city"></i></div>
+                    <p>City</p>
+                </div>
+                <div class="filter text-center mx-3 <%= category === 'Hills' ? 'active-filter' : '' %>" onclick="filterListings('Hills')">
+                    <div><i class="fa-solid fa-mountain"></i></div>
+                    <p>Hills</p>
+                </div>
+                <div class="filter text-center mx-3 <%= category === 'Camping' ? 'active-filter' : '' %>" onclick="filterListings('Camping')">
+                    <div><i class="fa-solid fa-campground"></i></div>
+                    <p>Camping</p>
+                </div>
+                <div class="filter text-center mx-3 <%= category === 'Snow' ? 'active-filter' : '' %>" onclick="filterListings('Snow')">
+                    <div><i class="fa-solid fa-snowflake"></i></div>
+                    <p>Snow</p>
+                </div>
+                <div class="filter text-center mx-3 <%= category === 'Monuments' ? 'active-filter' : '' %>" onclick="filterListings('Monuments')">
+                    <div><i class="fa-solid fa-monument"></i></div>
+                    <p>Monuments</p>
+                </div>
+                <div class="filter text-center mx-3 <%= category === 'Luxury' ? 'active-filter' : '' %>" onclick="filterListings('Luxury')">
+                    <div><i class="fa-solid fa-dollar-sign"></i></div>
+                    <p>Luxury</p>
+                </div>
+                <div class="filter text-center mx-3 <%= category === 'Farm' ? 'active-filter' : '' %>" onclick="filterListings('Farm')">
+                    <div><i class="fa-solid fa-cow"></i></div>
+                    <p>Farm</p>
+                </div>
+                <div class="filter text-center mx-3 <%= category === 'Boating' ? 'active-filter' : '' %>" onclick="filterListings('Boating')">
+                    <div><i class="fa-solid fa-sailboat"></i></div>
+                    <p>Boating</p>
+                </div>
+                <div class="filter text-center mx-3 <%= category === 'Skiing' ? 'active-filter' : '' %>" onclick="filterListings('Skiing')">
+                    <div><i class="fa-solid fa-person-skiing-nordic"></i></div>
+                    <p>Skiing</p>
+                </div>
+                <div class="filter text-center mx-3 <%= category === 'Play' ? 'active-filter' : '' %>" onclick="filterListings('Play')">
+                    <div><i class="fa-solid fa-bowling-ball"></i></div>
+                    <p>Play</p>
+                </div>
+                <div class="filter text-center mx-3 <%= category === 'Boring' ? 'active-filter' : '' %>" onclick="filterListings('Boring')">
+                    <div><i class="fa-solid fa-glasses"></i></div>
+                    <p>Boring</p>
+                </div>
+            </div>
+        
+            <!-- Right Scroll Button -->
+            <button id="scroll-right" class="btn btn-light position-absolute" style="right: 0; top: 50%; transform: translateY(-50%); z-index: 1;">
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+        </div>
+
+        <!-- Tax Toggle Switch -->
+        <div class="tax-toggle ml-6  text-nowrap">
+            <div class="form-check-reverse form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+                <label class="form-check-label" for="flexSwitchCheckDefault">Display total after taxes</label>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 1 -->
+    <div class="row row-cols-md-2 row-cols-lg-3 row-cols-xl-4 mt-3" >   <!-- setting number of cards based on screen size-->
+        
+        <% if (allListings.length === 0) { %>  <!--if no listings found-->
+            <h2 class="no-listing">Oops.....No listings found!</h2>
+        <% } else { %>
+        
+            <%for(let listing of allListings){%>  <!--prints all listings names as link--> 
+            <a href="/listings/<%=listing._id%>" class="listing-link">      <!--link to listing page-->   
+                <div class="card col listing-card" style="width: 17rem;">       
+                    <img src="<%=listing.image.url%>" class="card-img-top" alt="listing_image" style="height: 18rem">
+                    <div class="card-img-overlay"></div>
+                    <div class="card-body">
+                        <p class="card-text">
+                            <b><%=listing.title%></b><br>
+                            &#8377; <%=listing.price.toLocaleString("en-IN")%> /night
+                            <i class="tax-info">&nbsp; +18% GST</i>
+                        </p>
+                    </div>
+                </div>
+            </a>
+            <%}%>
+        <% } %>
+    </div>
+
+    
+</body>
+
+
+<script>
+
+    // Add event listener to toggle tax info
+    let taxSwitch = document.getElementById("flexSwitchCheckDefault");
+    taxSwitch.addEventListener("click", () => {
+        let taxInfo = document.getElementsByClassName("tax-info");
+        for (info of taxInfo){
+            if(info.style.display != "inline"){
+                info.style.display = "inline";
+            }
+            else{
+                info.style.display = "none";
+            }
+        }
+    });
+
+
+    // Add event listeners to scroll buttons
+    const scrollContainer = document.getElementById('scroll-container');
+    const scrollLeftButton = document.getElementById('scroll-left');
+    const scrollRightButton = document.getElementById('scroll-right');
+
+    // Restore scroll position from localStorage
+    if (localStorage.getItem("scrollPosition")) {
+        scrollContainer.scrollLeft = localStorage.getItem("scrollPosition");
+    }
+
+    // Add event listeners to scroll buttons
+    scrollLeftButton.addEventListener('click', () => {
+        scrollContainer.scrollBy({ left: -200, behavior: 'smooth' });
+    });
+
+    // Add event listeners to scroll buttons
+    scrollRightButton.addEventListener('click', () => {
+        scrollContainer.scrollBy({ left: 200, behavior: 'smooth' });
+    });
+
+    // Save scroll position before navigating away
+    window.addEventListener("beforeunload", () => {
+        localStorage.setItem("scrollPosition", scrollContainer.scrollLeft);
+    });
+
+    // Function to filter listings based on category
+    function filterListings(category) {
+        localStorage.setItem("scrollPosition", scrollContainer.scrollLeft);
+        window.location.href = `/listings?category=${(category)}`;
+    }
+</script>

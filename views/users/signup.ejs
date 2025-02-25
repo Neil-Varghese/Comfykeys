@@ -1,0 +1,106 @@
+<!-- signup page -->
+<% layout("/layouts/boilerplate")%>
+
+<style>
+    /* Centered container with a modern look */
+    .signup-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh; /* Reduced height to push card up */
+    }
+
+    .signup-card {
+        background: #fff;
+        padding: 1.5rem; /* Reduced padding to decrease height */
+        border-radius: 10px;
+        box-shadow: 5px 5px 20px grey;
+        width: 100%;
+        max-width: 400px;
+        margin-top: -50px; /* Moves the card higher */
+    }
+
+    .signup-card h1 {
+        text-align: center;
+        font-weight: bold;
+        margin-bottom: 1rem; /* Adjusted margin to save space */
+        color: #333;
+    }
+
+    .form-label {            /* Added form label style */
+        font-weight: 600;
+        color: #555;
+    }
+
+    .form-control {            /* Added form control style */
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        transition: border 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+
+    .form-control:focus {       /* Added form control focus style */
+        border-color: #28a745;
+        box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
+    }
+
+    /* Beautified Button */
+    #signupbtn {
+        width: 100%;
+        border-radius: 8px;
+        padding: 10px;
+        font-size: 1.1rem;
+        font-weight: bold;
+        transition: background-color 0.3s ease-in-out, transform 0.2s;
+    }
+         
+    #signupbtn:hover {                /* Hover effect */
+        background-color: #218838;
+        transform: scale(1.02);
+    }
+</style>
+
+<div class="signup-container">           <!-- Centered container -->
+    <div class="signup-card">
+        <h1>Sign Up on ComfyKeys</h1>
+        <form action="/signup" method="POST" novalidate class="needs-validation">           <!-- Added novalidate -->
+
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>         <!-- Added form label -->
+                <input                                                            
+                    id="username"
+                    name="username"                                               
+                    type="text" 
+                    class="form-control" 
+                    required
+                />                                                                 <!-- Added required -->
+                <div class="valid-feedback">Looks good!</div>
+                <div class="invalid-feedback">Username should be valid</div>
+            </div>
+
+            <div class="mb-3">                                                     <!-- Added margin bottom -->
+                <label for="email" class="form-label">Email</label>              <!-- Added form label -->
+                <input 
+                    id="email"
+                    name="email" 
+                    type="email" 
+                    class="form-control" 
+                    required
+                />
+            </div>                                                             <!-- Added margin bottom -->
+
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input 
+                    id="password"
+                    name="password" 
+                    type="password" 
+                    class="form-control" 
+                    required
+                />
+            </div>
+
+            <button class="btn btn-success" id="signupbtn">Sign Up</button>  <!-- Beautified Button -->
+
+        </form>
+    </div>
+</div>

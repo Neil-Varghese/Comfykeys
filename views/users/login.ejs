@@ -1,0 +1,93 @@
+<!-- login page -->
+<% layout("/layouts/boilerplate")%>
+
+<style>
+    /* Centered container with a modern look */
+    .login-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 80vh; /* Reduced height to push card up */
+    }
+
+    .login-card {
+        background: #fff;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 5px 5px 20px grey;
+        width: 100%;
+        max-width: 400px;
+        margin-top: -50px; /* Moves the card higher */
+    }
+    
+    .login-card h1 {                                        /* Title */
+        text-align: center;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 1rem;
+    }
+
+    .form-label {                                            /* Label */
+        font-weight: 600;
+        color: #555;
+    }
+
+    .form-control {                                                                 /* Input */
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        transition: border 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+
+    .form-control:focus {                                 /* Input focus */
+        border-color: #28a745;
+        box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
+    }
+
+    /* Beautified Button */
+    #loginbtn {
+        width: 100%;
+        border-radius: 8px;
+        padding: 10px;
+        font-size: 1.1rem;
+        font-weight: bold;
+        transition: background-color 0.3s ease-in-out, transform 0.2s;
+    }
+
+    #loginbtn:hover {                                     /* Button hover */
+        background-color: #218838;
+        transform: scale(1.02);
+    }
+</style>
+
+<div class="login-container">                          <!-- Centered container -->
+    <div class="login-card">
+        <h1>Login to Comfykeys</h1>                    <!-- Title -->
+        <form action="/login" method="POST" novalidate class="needs-validation">    <!-- Form -->
+
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>         <!-- Label -->
+                <input 
+                    id="username"
+                    name="username" 
+                    type="text" 
+                    class="form-control" 
+                    required
+                />                                             <!-- Input -->
+            </div>
+           
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>      <!-- Label -->
+                <input 
+                    id="password"
+                    name="password" 
+                    type="password" 
+                    class="form-control" 
+                    required
+                />                               <!-- Input -->
+            </div>
+
+            <button class="btn btn-success" id="loginbtn">Login</button>    <!-- Button -->
+
+        </form>
+    </div>
+</div>

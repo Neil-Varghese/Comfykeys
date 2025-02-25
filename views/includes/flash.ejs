@@ -1,0 +1,69 @@
+<br> <!--this is the flash message error or success-->
+
+<style>
+
+    
+    .flash-alert .btn-close:focus {                           /*remove the focus outline*/
+        box-shadow: none;
+        outline: none;
+    }
+
+    .flash-alert {                                              /*alert box style*/
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 600px;
+        z-index: 1050;
+        opacity: 0;
+        animation: slideIn 0.5s forwards;
+    }
+
+    @keyframes slideIn {                                    
+        from {
+            opacity: 0;
+            transform: translate(-50%, 50px);
+        }
+        to {
+            opacity: 1;
+            transform: translate(-50%, 0);
+        }
+    }
+
+    /* Smooth fade-out effect */
+    .fade-out {
+        transition: opacity 20s ease-out;
+        opacity: 0;
+    }
+</style>
+
+
+<% if (success && success.length) { %>                      <!--if success message is not empty-->
+    <div class="flash-alert alert alert-success alert-dismissible fade show" role="alert">
+        <%= success %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+<% } %>
+
+<% if (error && error.length) { %>                           <!--if error message is not empty-->
+    <div class="flash-alert alert alert-danger alert-dismissible fade show" role="alert">
+        <%= error %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+<% } %>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () { // Wait for the DOM to load
+        let alerts = document.querySelectorAll(".flash-alert");
+
+        alerts.forEach(alert => {                               // Loop through each alert
+            setTimeout(() => {
+                alert.classList.add("fade-out"); // Start fade-out effect
+                
+                // Wait for the transition to finish before removing the element
+                setTimeout(() => alert.remove(), 2000); // Matches fade-out duration
+            }, 5000); // 5-second delay before fading out
+        });
+    });
+</script>
+

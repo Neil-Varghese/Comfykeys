@@ -1,0 +1,487 @@
+<!--provide edit option of information of listing-->
+<% layout("/layouts/boilerplate")%>
+
+<style>
+
+    /* Custom dropdown styles */
+    .custom-input {
+        display: block;
+        width: 100%;
+        padding: 0.375rem 0.75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da !important; /* Ensures border is applied */
+        border-radius: 0.375rem;
+        appearance: none;
+        text-align: left;
+        box-shadow: none; /* Removes Bootstrap's default button shadow */
+    }
+
+    /* Custom dropdown styles */
+    .custom-dropdown {
+        display: block;
+        width: 100%;
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #f8f9fa; /* Light gray background */
+        border: 1px solid #ced4da; /* Subtle border */
+        border-radius: 0.375rem;
+        transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    /* Custom dropdown styles */
+    .custom-dropdown:hover {
+        background-color: #e9ecef; /* Slight hover effect */
+        border-color: #adb5bd;
+    }
+
+    /* Custom dropdown styles */
+    .dropdown-menu {
+        width: 100%; /* Full width dropdown */
+        max-height: 200px; /* Set max height for scrolling */
+        overflow-y: auto; /* Enable vertical scrolling */
+        border-radius: 0.375rem; /* Rounded corners */
+        border: 1px solid #ced4da;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15); /* Subtle shadow for depth */
+    }
+
+    /* Custom dropdown styles */
+    .dropdown-menu::-webkit-scrollbar {
+        width: 8px; /* Add scrollbar width */
+    }
+
+    /* Custom dropdown styles */
+    .dropdown-menu::-webkit-scrollbar-thumb {
+        background-color: #adb5bd; /* Scrollbar color */
+        border-radius: 4px;
+    }
+
+    /* Custom dropdown styles */
+    .dropdown-menu::-webkit-scrollbar-thumb:hover {
+        background-color: #868e96; /* Darker on hover */
+    }
+
+    /* Custom dropdown styles */
+    .dropdown-menu .dropdown-item {
+        display: flex;
+        align-items: center;
+        font-size: 0.9rem; /* Slightly smaller font for options */
+        padding: 0.5rem 1rem;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* Custom dropdown styles */
+    .dropdown-menu .dropdown-item:hover {
+        background-color: #e9ecef; /* Highlight effect on hover */
+        color: #495057;
+        cursor: pointer;
+    }
+
+    /* Custom dropdown styles */
+    .category-checkbox {
+        margin-right: 0.5rem; /* Space between checkbox and label */
+    }
+
+    /* Ensures the dropdown remains visible and looks clean */
+    .custom-dropdown:focus,
+    .custom-dropdown:active {
+        background-color: #e9ecef;
+        border-color: #adb5bd;
+        outline: none;
+        box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25); /* Subtle focus shadow */
+    }
+
+    /* Custom dropdown styles */
+    .edit-btn{
+        position: relative;
+        left: 345px;
+        color: white;
+        width:60px;
+        height:35px;
+        border: none;
+        margin-bottom: 40px;
+        margin-top:20px;
+        border-radius:7px;
+    }
+
+    /* Custom dropdown styles */
+    .edit-btn:hover{
+        background-color: #28a745 !important
+    }
+
+</style>
+
+<body>
+
+    
+    <div class="row mt-3">
+        <div class="col-8 offset-2">
+            
+    <h3><b>Edit Your Listing</b></h3>
+    <!--making a form to edit all the input fields-->
+    <form 
+        method="POST" 
+        action="/listings/<%=listing._id%>?_method=PUT" 
+        novalidate 
+        class="needs-validation"
+        enctype = "multipart/form-data">     <!--sending a put request to edit information-->
+        
+        <div class="mb-3" >
+            <label for="title" class="form-label">Title</label>  <!--label for title-->
+            <input 
+                name="listing[title]" 
+                value="<%=listing.title%>" 
+                type="text" 
+                class="form-control" 
+                id="title"
+                required
+            />            <!--sets the value to the previous value-->
+            <div class="valid-feedback">Title looks good!</div>     <!--if title is valid-->
+            <div class="invalid-feedback">Title should be valid</div>       <!--if title is invalid-->
+        </div>
+        
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>   <!--label for description-->
+            <textarea 
+                id="description"
+                name="listing[description]"
+                class="form-control" required><%=listing.description%>%></textarea>  <!--sets the value to the previous value-->
+            <div class="invalid-feedback">Please enter a short description</div>    <!--if description is invalid-->
+        </div>
+
+        <div class="mb-3">        
+            Original Listing Image <br>
+            <img src="<%=originalImageUrl%>"  />    <!--displaying the original image-->
+        </div>                  
+
+
+        <div class="mb-3">
+            <label for="image" class="form-label">Upload New Image</label>  <!--label for image-->
+            <input name="listing[image]" 
+                id="image"
+                value="<%=listing.image%>" 
+                type="file" 
+                class="form-control"
+                accept=".png, .jpg, .jpeg"  
+            />                                                              <!--accepts only png, jpg, jpeg files-->
+            <div class="valid-feedback">Looks good!</div>
+            <div class="invalid-feedback">Only PNG, JPG, or JPEG files are allowed.</div>
+        </div>
+
+        
+        <div class = "row">
+        <div class="mb-3 col-md-4">
+            <!--label for price-->
+            <label for="price" class="form-label">Price</label> 
+            <input name="listing[price]" 
+                id="price"
+                value="<%=listing.price%>" 
+                type="number" 
+                class="form-control"
+                required
+            />
+            <div class="invalid-feedback">Price should be valid</div>
+        </div>
+        
+        
+        <div class="mb-3 col-md-4">
+            <label for="country" class="form-label">Country</label>
+            <input name="listing[country]" 
+                id="country"
+                value="<%=listing.country%>" 
+                type="text" 
+                class="form-control"
+                required
+            />
+            <div class="invalid-feedback">Country should be valid</div>
+        </div>
+
+        <div class="mb-3 col-md-4">     
+            <label for="categoriesDropdown" class="form-label">Select Categories</label>    <!--label for categories-->
+            <div class="dropdown">   <!--dropdown for categories-->
+                <button 
+                    class="btn dropdown-toggle custom-input form-control" 
+                    type="button" 
+                    id="categoriesDropdown" 
+                    data-bs-toggle="dropdown" 
+                    aria-expanded="false"
+                >       <!--button for dropdown-->
+                    Select categories
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="categoriesDropdown">  <!--dropdown menu-->
+                    <li>                            <!--list of categories-->
+                        <label class="dropdown-item">   <!--label for category-->
+                            <input type="checkbox" class="category-checkbox" value="Popular"   
+                            <% if (listing.categories && listing.categories.includes("Popular")) { %> checked <% } %>>  <!--if category is checked-->
+                            Popular
+                            &nbsp;&nbsp;
+                            <i class="fa-solid fa-thumbs-up"></i>  <!--icon for category-->
+                        </label>                            <!--label for category-->
+                    </li>
+                    <li>
+                        <label class="dropdown-item">
+                            <input type="checkbox" class="category-checkbox" value="Pools" 
+                            <% if (listing.categories && listing.categories.includes("Pools")) { %> checked <% } %>> 
+                            Pools
+                            &nbsp;&nbsp;
+                            <i class="fa-solid fa-water-ladder"></i>
+                        </label>
+                    </li>
+                    <li>
+                        <label class="dropdown-item">
+                            <input type="checkbox" class="category-checkbox" value="Rooms"
+                            <% if (listing.categories && listing.categories.includes("Rooms")) { %> checked <% } %>> 
+                            Rooms
+                            &nbsp;&nbsp;
+                            <i class="fa-solid fa-bed"></i>
+                        </label>
+                    </li>
+                    <li>
+                        <label class="dropdown-item">
+                            <input type="checkbox" class="category-checkbox" value="Beach"
+                            <% if (listing.categories && listing.categories.includes("Beach")) { %> checked <% } %>> 
+                            Beach
+                            &nbsp;&nbsp;
+                            <i class="fa-solid fa-umbrella-beach"></i>
+                        </label>
+                    </li>
+                    <li>
+                        <label class="dropdown-item">
+                            <input type="checkbox" class="category-checkbox" value="City"
+                            <% if (listing.categories && listing.categories.includes("City")) { %> checked <% } %>> 
+                            City
+                            &nbsp;&nbsp;
+                            <i class="fa-solid fa-city"></i>
+                        </label>
+                    </li>
+                    <li>
+                        <label class="dropdown-item">
+                            <input type="checkbox" class="category-checkbox" value="Hills"
+                            <% if (listing.categories && listing.categories.includes("Hills")) { %> checked <% } %>> 
+                            Hills
+                            &nbsp;&nbsp;
+                            <i class="fa-solid fa-mountain"></i>
+                        </label>
+                    </li>
+                    <li>
+                        <label class="dropdown-item">
+                            <input type="checkbox" class="category-checkbox" value="Camping"
+                            <% if (listing.categories && listing.categories.includes("Camping")) { %> checked <% } %>> 
+                            Camping
+                            &nbsp;&nbsp;
+                            <i class="fa-solid fa-campground"></i>
+                        </label>
+                    </li>
+                    <li>
+                        <label class="dropdown-item">
+                            <input type="checkbox" class="category-checkbox" value="Snow"
+                            <% if (listing.categories && listing.categories.includes("Snow")) { %> checked <% } %>> 
+                            Snow
+                            &nbsp;&nbsp;
+                            <i class="fa-solid fa-snowflake"></i>
+                        </label>
+                    </li>
+
+                    <li>
+                        <label class="dropdown-item">
+                            <input type="checkbox" class="category-checkbox" value="Monuments"
+                            <% if (listing.categories && listing.categories.includes("Monuments")) { %> checked <% } %>> 
+                            Monuments
+                            &nbsp;&nbsp;
+                            <i class="fa-solid fa-monument"></i>
+                        </label>
+                    </li>
+                    <li>
+                        <label class="dropdown-item">
+                            <input type="checkbox" class="category-checkbox" value="Luxury"
+                            <% if (listing.categories && listing.categories.includes("Luxury")) { %> checked <% } %>> 
+                            Luxury
+                            &nbsp;&nbsp;
+                            <i class="fa-solid fa-dollar-sign"></i>
+                        </label>
+                    </li>
+                    <li>
+                        <label class="dropdown-item">
+                            <input type="checkbox" class="category-checkbox" value="Farm"
+                            <% if (listing.categories && listing.categories.includes("Farm")) { %> checked <% } %>> 
+                            Farm
+                            &nbsp;&nbsp;
+                            <i class="fa-solid fa-cow"></i>
+                        </label>
+                    </li>
+                    <li>
+                        <label class="dropdown-item">
+                            <input type="checkbox" class="category-checkbox" value="Boating"
+                            <% if (listing.categories && listing.categories.includes("Boating")) { %> checked <% } %>> 
+                            Boating
+                            &nbsp;&nbsp;
+                            <i class="fa-solid fa-sailboat"></i>
+                        </label>
+                    </li>
+                    <li>
+                        <label class="dropdown-item">
+                            <input type="checkbox" class="category-checkbox" value="Skiing"
+                            <% if (listing.categories && listing.categories.includes("Skiing")) { %> checked <% } %>> 
+                            Skiing
+                            &nbsp;&nbsp;
+                            <i class="fa-solid fa-person-skiing-nordic"></i>
+                        </label>
+                    </li>
+                    <li>
+                        <label class="dropdown-item">
+                            <input type="checkbox" class="category-checkbox" value="Play"
+                            <% if (listing.categories && listing.categories.includes("Play")) { %> checked <% } %>> 
+                            Play
+                            &nbsp;&nbsp;
+                            <i class="fa-solid fa-bowling-ball"></i>
+                        </label>
+                    </li>
+                    <li>
+                        <label class="dropdown-item">
+                            <input type="checkbox" class="category-checkbox" value="Boring"
+                            <% if (listing.categories && listing.categories.includes("Boring")) { %> checked <% } %>> 
+                            Boring
+                            &nbsp;&nbsp;
+                            <i class="fa-solid fa-glasses"></i>
+                        </label>
+                    </li>
+
+
+                </ul>
+            </div>
+
+            <div id="hidden-inputs-container"></div>
+
+        </div>
+
+        </div>
+
+
+
+        <div class="mb-3">     
+            <label for="location" class="form-label">Location</label>  <!--label for location-->
+            <input name="listing[location]" 
+                id="location"
+                value="<%=listing.location%>" 
+                type="text" 
+                class="form-control"
+                required
+            />                                                          <!--sets the value to the previous value-->
+            <div class="invalid-feedback">Location should be valid</div>   <!--if location is invalid-->
+        </div>
+        
+        <button class="edit-btn  ">Edit</button>                        <!--button to edit the information-->
+        
+    </form>
+    </div>
+    </div>
+
+
+    <script>
+        const dropdownButton = document.getElementById("categoriesDropdown");  //dropdown button
+        const checkboxes = document.querySelectorAll(".category-checkbox");     //checkboxes for categories
+        const hiddenInputsContainer = document.getElementById("hidden-inputs-container"); //hidden inputs container
+
+        checkboxes.forEach(checkbox => {                                       //for each checkbox
+            checkbox.addEventListener("change", () => {                        //when checkbox is changed
+                const { value, checked } = checkbox;                           //get the value and checked status
+
+                if (checked) {                                                 //if checked
+                    const hiddenInput = document.createElement("input");
+                    hiddenInput.type = "hidden";
+                    hiddenInput.name = "listing[categories][]";
+                    hiddenInput.value = value;
+                    hiddenInput.dataset.value = value;
+                    hiddenInputsContainer.appendChild(hiddenInput);
+                } else {                                                       //if not checked
+                    const hiddenInputToRemove = hiddenInputsContainer.querySelector(`input[data-value="${value}"]`); //find the hidden input
+                    if (hiddenInputToRemove) {                                 //remove the hidden input
+                        hiddenInputToRemove.remove();
+                    }
+                }
+
+                updateSelectedCategories();                                     //update the selected categories
+            });
+        });
+
+        function updateSelectedCategories() {                                   //function to update selected categories
+            const selected = Array.from(checkboxes)                             //get the selected categories
+                .filter(checkbox => checkbox.checked)
+                .map(checkbox => checkbox.value);
+
+            if (selected.length > 0) {                                          //if selected categories are more than 0
+                dropdownButton.textContent = `${selected.length} Selected`;
+                dropdownButton.title = selected.join(", ");
+            } else {                                                            //if selected categories are 0
+                dropdownButton.textContent = "Select categories";
+                dropdownButton.title = "";
+            }
+        }
+
+        // Prevent dropdown from closing when clicking inside
+        const dropdownMenu = document.querySelector(".dropdown-menu");
+        dropdownMenu.addEventListener("click", (event) => {
+            event.stopPropagation();
+        });
+
+        // Update selected categories when the dropdown is hidden
+        document.addEventListener("DOMContentLoaded", function () {             //when the document is loaded
+            const fileInput = document.getElementById("image");
+            const allowedExtensions = ["png", "jpg", "jpeg"];
+
+            // Validate file input
+            fileInput.addEventListener("change", function () {
+                const file = fileInput.files[0];
+
+                // Check if file is valid
+                if (file) {
+                    const fileName = file.name.toLowerCase();
+                    const fileExtension = fileName.split('.').pop();
+
+                    // Check if file extension is allowed
+                    if (!allowedExtensions.includes(fileExtension)) {
+                        alert("Invalid file type, only PNG, JPG, or JPEG files are allowed.");
+                        fileInput.value = ""; // Reset the file input
+                    }
+                }
+            });
+        });
+
+        // Update selected categories when the dropdown is hidden
+        document.addEventListener("DOMContentLoaded", function () {
+            const fileInput = document.getElementById("image");
+            const allowedExtensions = ["png", "jpg", "jpeg"];
+
+            // Validate file input
+            fileInput.addEventListener("change", function () {
+                const file = fileInput.files[0];
+
+                // Check if file is valid
+                if (file) {
+                    const fileName = file.name.toLowerCase();
+                    const fileExtension = fileName.split('.').pop();
+
+                    // Check if file extension is allowed
+                    if (allowedExtensions.includes(fileExtension)) {
+                        fileInput.classList.remove("is-invalid");
+                        fileInput.classList.add("is-valid");
+                    } else {                                                ///if file extension is not allowed
+                        fileInput.classList.remove("is-valid");
+                        fileInput.classList.add("is-invalid");
+                        alert("Invalid file type. Only PNG, JPG, or JPEG files are allowed.");
+                        fileInput.value = ""; // Reset the file input
+                    }
+                } else {                                                    //if file is not valid
+                    fileInput.classList.remove("is-valid");
+                    fileInput.classList.add("is-invalid");
+                }
+            });                                                               
+        });
+
+    </script>                                                               
+</body>                                                                      
